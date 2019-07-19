@@ -1,0 +1,285 @@
+openapi: '3.0.0'
+info:
+  version: 1.0.0
+  title: Customer Repository
+  description: API to serve customer data
+servers:
+  - url: http://localhost:3000
+paths:
+  /customers:
+    get:
+      description: Return customer first name, last name and email address
+      operationId: getCustomers
+      tags:
+        - Customer
+      parameters:
+        - name: limit
+          in: query
+          description: Maximum number of customers from API call
+          required: false
+          schema:
+            type: integer
+            format: int32
+        - name: offset
+          in: query
+          description: Skip number of customers from API call
+          required: false
+          schema:
+            type: integer
+            format: int32
+      responses:
+        '200':
+          description: Return user first name, last name and email address
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Customer'
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    post:
+      description: Create a new customer
+      operationId: postCustomer
+      tags:
+        - Customer
+      requestBody:
+        description: New customer to add
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Customer'
+      responses:
+        '200':
+          description: Returns the customer created/added
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Customer'
+        '401':
+          description: User not authorised to perform action
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /customers/{:customer}:
+    get:
+      description: Return a customer based on customer ID
+      operationId: getCustomer
+      tags:
+        - Customer
+      responses:
+        '200':
+          description: Returns the customer requested
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Customer'
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    put:
+      description: Update a customer details based on customer ID
+      operationId: updateCustomer
+      tags:
+        - Customer
+      responses:
+        '200':
+          description: Returns the customer updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Customer'
+        '403':
+          description: User not authorised to perform action
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    delete:
+      description: Delete a customer based on customer ID
+      operationId: deleteCustomer
+      tags:
+        - Customer
+      responses:
+        '204':
+          description: The server has successfully fulfilled the request and that there is no additional content to send in the response payload body
+        '403':
+          description: User not authorised to perform action
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /users:
+    get:
+      description: Return user username, email and token
+      operationId: getUser
+      tags:
+        - User
+      responses:
+        '200':
+          description: Return user username, email and token
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '401':
+          description: User not authorised to perform action
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    post:
+      description: Create user account
+      operationId: addUser
+      tags:
+        - User
+      requestBody:
+        description: User account to create
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserDetails'
+      responses:
+        '200':
+          description: Return user username, email and token
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /users/login:
+    post:
+      description: Login to user account
+      operationId: userLogin
+      tags:
+        - User
+      requestBody:
+        description: User account to login
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserDetails'
+      responses:
+        '200':
+          description: Return user username, email and token
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /users/{:user}:
+    put:
+      description: Update user account details
+      operationId: userUpdate
+      tags:
+        - User
+      requestBody:
+        description: User account to update
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserDetails'
+      responses:
+        '200':
+          description: Return user username, email and token
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+components:
+  schemas:
+    Customer:
+      type: object
+      required:
+        - firstName
+        - lastName
+      properties:
+        firstName:
+          type: string
+        lastName:
+          type: string
+        email:
+          type: string
+        customerId:
+          type: string
+    UserDetails:
+      type: object
+      required:
+        - username
+        - email
+        - password
+      properties:
+        username:
+          type: string
+        email:
+          type: string
+        password:
+          type: string
+          format: password
+    User:
+      type: object
+      properties:
+        username:
+          type: string
+        email:
+          type: string
+        token:
+          type: string
+          description: JWT used to access resources requiring auth
+    Error:
+      type: object
+      properties:
+        error:
+          type: string
+        message:
+          type: string
