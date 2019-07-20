@@ -1,0 +1,32 @@
+### Post to customer repo
+POST http://localhost:3001/customers HTTP/1.1
+content-type: application/json
+
+{
+  "customer": {
+    "firstName": "John",
+    "lastName": "Pollard",
+    "email": "john@email.com"
+  }
+}
+
+### Get all customer details
+GET http://localhost:3001/customers HTTP/1.1
+
+### Get a certain customer
+GET http://localhost:3001/customers/5d326103b4618c2f3c182bab HTTP/1.1
+
+### Update a customer details
+PUT http://localhost:3001/customers/5d326103b4618c2f3c182bab HTTP/1.1
+content-type: application/json
+
+{
+  "customer": {
+    "firstName": "John",
+    "lastName": "Pollard",
+    "email": "james@email.com"
+  }
+}
+
+### Delete customer details
+DELETE http://localhost:3001/customers/5d326103b4618c2f3c182bab HTTP/1.1
