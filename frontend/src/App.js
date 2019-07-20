@@ -6,6 +6,8 @@ import Customer from './views/Customer'
 import Header from './views/components/Header'
 import Footer from './views/components/Footer'
 
+import { portalDetails } from './config'
+
 const useStyles = makeStyles(theme => ({
   root: {
     display: 'flex',
@@ -20,9 +22,9 @@ const App = () => {
   return (
     <div className={classes.root}>
       <CssBaseline />
-      <Header />
+      <Header title={portalDetails.title} logo={portalDetails.logoLink} />
       <Customer />
-      <Footer />
+      <Footer footerText={portalDetails.footerText} />
     </div>
   )
 }
