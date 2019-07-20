@@ -1,9 +1,17 @@
-# Dependencies
+# dependencies
 */node_modules
 
-# Environment variables
+# environment variables
 */.env
 */.env.*
 
-# Test files
+# testing
 backend/src/routes/*.http
+frontend/coverage
+
+# production
+frontend/build
+
+# misc
+*/.DS_Store
+*/npm-debug.log*
