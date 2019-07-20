@@ -29,7 +29,6 @@ router.get('/', (req, res, next) => {
 
 router.post('/', (req, res, next) => {
   const customer = new Customer(req.body.customer)
-  console.log(customer)
 
   return customer
     .save()
@@ -38,7 +37,18 @@ router.post('/', (req, res, next) => {
         customer: customer.toResponse(),
       })
     })
-    .catch(next)
+    .catch(err => {
+      if (err.name == 'ValidationError') {
+        const errorField = Object.keys(err.errors)[0]
+        return res.json({
+          errors: {
+            error: err.name,
+            message: `${errorField} ${err.errors[errorField].message}`,
+          },
+        })
+      }
+      next()
+    })
 })
 
 // Preload customer objects on routes with ':customer'
@@ -80,7 +90,18 @@ router.put('/:customer', (req, res, next) => {
         customer: customer.toResponse(),
       })
     })
-    .catch(next)
+    .catch(err => {
+      if (err.name == 'ValidationError') {
+        const errorField = Object.keys(err.errors)[0]
+        return res.json({
+          errors: {
+            error: err.name,
+            message: `${errorField} ${err.errors[errorField].message}`,
+          },
+        })
+      }
+      next()
+    })
 })
 
 router.delete('/:customer', (req, res, next) => {

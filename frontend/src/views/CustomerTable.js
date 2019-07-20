@@ -2,8 +2,11 @@ import React, { useEffect } from 'react'
 import MaterialTable from 'material-table'
 import { makeStyles } from '@material-ui/core/styles'
 
+import MessageBox from './components/Snackbar'
+
 import api from '../api'
 import { StringHelper } from '../utils'
+import { tableColumns } from '../config'
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -19,13 +22,7 @@ const CustomerTable = () => {
   const classes = useStyles()
 
   const [state, setState] = React.useState([])
-
-  const tableColumns = [
-    { title: 'Customer ID', field: '_id', hidden: true },
-    { title: 'First Name', field: 'firstName' },
-    { title: 'Last Name', field: 'lastName' },
-    { title: 'Email', field: 'email', type: 'string' },
-  ]
+  const [error, setError] = React.useState({ open: false, msg: '' })
 
   useEffect(() => {
     const getCustomerData = async () => {
@@ -69,14 +66,30 @@ const CustomerTable = () => {
     }
   }
 
+  const checkValidationError = res => {
+    if (res.errors && res.errors.error === 'ValidationError') {
+      setError({ open: true, msg: res.errors.message })
+    }
+    return
+  }
+
+  const handleCloseError = (event, reason) => {
+    if (reason === 'clickaway') {
+      return
+    }
+
+    setError({ open: false, msg: '' })
+  }
+
   const addData = async ({ firstName, lastName, email }) => {
     const newCustomer = {
       firstName,
       lastName,
       email,
     }
-    await api.Customers.create(newCustomer)
+    const res = await api.Customers.create(newCustomer)
 
+    checkValidationError(res)
     const tableContent = await getCustomerData()
     setState(tableContent)
   }
@@ -87,8 +100,9 @@ const CustomerTable = () => {
       lastName,
       email,
     }
-    await api.Customers.update(newCustomerData, _id)
+    const res = await api.Customers.update(newCustomerData, _id)
 
+    checkValidationError(res)
     const tableContent = await getCustomerData()
     setState(tableContent)
   }
@@ -103,6 +117,12 @@ const CustomerTable = () => {
 
   return (
     <div className={classes.root}>
+      <MessageBox
+        message={error.msg}
+        handleClose={(event, reason) => handleCloseError(event, reason)}
+        open={error.open}
+        messageType={'error'}
+      />
       <MaterialTable
         title="Customer Data"
         columns={state.columns}
