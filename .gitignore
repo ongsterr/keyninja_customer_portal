@@ -6,4 +6,4 @@
 */.env.*
 
 # Test files
-backend/src/routes/.http
+backend/src/routes/*.http
