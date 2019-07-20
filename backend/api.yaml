@@ -252,6 +252,12 @@ components:
           type: string
         customerId:
           type: string
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
     UserDetails:
       type: object
       required:
@@ -279,7 +285,10 @@ components:
     Error:
       type: object
       properties:
-        error:
-          type: string
-        message:
-          type: string
+        errors:
+          type: object
+          properties:
+            error:
+              type: string
+            message:
+              type: string
