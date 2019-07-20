@@ -3,6 +3,7 @@ import MaterialTable from 'material-table'
 import { makeStyles } from '@material-ui/core/styles'
 
 import api from '../api'
+import { StringHelper } from '../utils'
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -29,7 +30,15 @@ const CustomerTable = () => {
   useEffect(() => {
     const getCustomerData = async () => {
       const res = await api.Customers.getAll()
-      const data = res.customers
+      const data = res.customers.map(customer => {
+        const capitalizedFirstName = StringHelper.capitalize(customer.firstName)
+        const capitalizedLastName = StringHelper.capitalize(customer.lastName)
+        return {
+          ...customer,
+          firstName: capitalizedFirstName,
+          lastName: capitalizedLastName,
+        }
+      })
 
       const tableContent = {
         columns: tableColumns,
@@ -44,7 +53,15 @@ const CustomerTable = () => {
 
   const getCustomerData = async () => {
     const res = await api.Customers.getAll()
-    const data = res.customers
+    const data = res.customers.map(customer => {
+      const capitalizedFirstName = StringHelper.capitalize(customer.firstName)
+      const capitalizedLastName = StringHelper.capitalize(customer.lastName)
+      return {
+        ...customer,
+        firstName: capitalizedFirstName,
+        lastName: capitalizedLastName,
+      }
+    })
 
     return {
       columns: tableColumns,
