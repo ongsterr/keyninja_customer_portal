@@ -21,8 +21,8 @@ The app is currently deployed here: [KeyNinja Customer Portal](https://secret-re
 
 **Headers**
 
-1. `firstName`
-2. `lastName`
+1. `firstName` (required)
+2. `lastName` (required)
 3. `email`
 
 ---
