@@ -1,15 +1,11 @@
 import axios from './init'
 
-let token = null
-const setToken = _token => (token = _token)
-
 const requests = {
   get: async url => {
     try {
       const response = await axios({
         method: 'get',
         url,
-        headers: token ? { Authorization: `Bearer ${token}` } : '',
       })
       return response.data
     } catch (err) {
@@ -21,7 +17,6 @@ const requests = {
       const response = await axios({
         method: 'post',
         url,
-        headers: token ? { Authorization: `Bearer ${token}` } : '',
         data: body,
       })
       return response.data
@@ -34,7 +29,6 @@ const requests = {
       const response = await axios({
         method: 'put',
         url,
-        headers: token ? { Authorization: `Bearer ${token}` } : '',
         data: body,
       })
       return response.data
@@ -47,7 +41,6 @@ const requests = {
       const response = await axios({
         method: 'delete',
         url,
-        headers: token ? { Authorization: `Bearer ${token}` } : '',
       })
       return response.data
     } catch (err) {
@@ -68,5 +61,4 @@ const Customers = {
 
 export default {
   Customers,
-  setToken,
 }
