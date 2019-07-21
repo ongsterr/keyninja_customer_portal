@@ -12,11 +12,15 @@ export const tableDetails = {
     { title: 'Last Name', field: 'lastName' },
     { title: 'Email', field: 'email', type: 'string' },
   ],
-  tableTitle: 'Customer Data',
+  tableTitle: '',
   tableOptions: {
     search: true,
     pageSize: 10,
     exportButton: true,
     exportAllData: true,
   },
+}
+
+export const uploadConfig = {
+  columns: ['firstName', 'lastName', 'email'],
 }

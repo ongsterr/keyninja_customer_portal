@@ -59,7 +59,7 @@ const requests = {
 const limit = (count, p) => `limit=${count}&offset=${p ? p : 0}`
 
 const Customers = {
-  getAll: page => requests.get(`/customers?${limit(100, page)}`),
+  getAll: page => requests.get(`/customers?${limit(1000, page)}`),
   create: customers => requests.post('/customers', { customers }),
   update: (customer, customerId) =>
     requests.put(`/customers/${customerId}`, { customer }),

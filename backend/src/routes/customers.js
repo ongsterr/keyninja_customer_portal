@@ -1,6 +1,8 @@
 const router = require('express').Router()
 const mongoose = require('mongoose')
 
+const { customerErrorHandling } = require('../utils/errors')
+
 const Customer = mongoose.model('Customer')
 
 router.get('/', (req, res, next) => {
@@ -40,16 +42,7 @@ router.post('/', (req, res, next) => {
       })
     })
     .catch(err => {
-      if (err.name == 'ValidationError') {
-        const errorField = Object.keys(err.errors)[0]
-        return res.json({
-          errors: {
-            error: err.name,
-            message: `${errorField} ${err.errors[errorField].message}`,
-          },
-        })
-      }
-      next()
+      customerErrorHandling(err, res, next)
     })
 })
 
@@ -93,16 +86,7 @@ router.put('/:customer', (req, res, next) => {
       })
     })
     .catch(err => {
-      if (err.name == 'ValidationError') {
-        const errorField = Object.keys(err.errors)[0]
-        return res.json({
-          errors: {
-            error: err.name,
-            message: `${errorField} ${err.errors[errorField].message}`,
-          },
-        })
-      }
-      next()
+      customerErrorHandling(err, res, next)
     })
 })
 
