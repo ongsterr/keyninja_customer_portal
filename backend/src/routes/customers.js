@@ -28,13 +28,15 @@ router.get('/', (req, res, next) => {
 })
 
 router.post('/', (req, res, next) => {
-  const customer = new Customer(req.body.customer)
+  const newCustomersPromise = req.body.customers.map(customer => {
+    const newCustomer = new Customer(customer)
+    return newCustomer.save()
+  })
 
-  return customer
-    .save()
-    .then(() => {
+  Promise.all(newCustomersPromise)
+    .then(customers => {
       return res.json({
-        customer: customer.toResponse(),
+        customers,
       })
     })
     .catch(err => {

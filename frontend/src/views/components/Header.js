@@ -44,7 +44,7 @@ const Header = ({ logo, title }) => {
 }
 
 Header.propTypes = {
-  logo: PropTypes.object,
+  logo: PropTypes.string,
   title: PropTypes.string,
 }
 

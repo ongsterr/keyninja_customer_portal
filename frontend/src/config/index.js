@@ -5,9 +5,18 @@ export const portalDetails = {
   footerText: '-- This is part of KeyNinja coding exercise --',
 }
 
-export const tableColumns = [
-  { title: 'Customer ID', field: '_id', hidden: true },
-  { title: 'First Name', field: 'firstName' },
-  { title: 'Last Name', field: 'lastName' },
-  { title: 'Email', field: 'email', type: 'string' },
-]
+export const tableDetails = {
+  tableColumns: [
+    { title: 'Customer ID', field: '_id', hidden: true },
+    { title: 'First Name', field: 'firstName' },
+    { title: 'Last Name', field: 'lastName' },
+    { title: 'Email', field: 'email', type: 'string' },
+  ],
+  tableTitle: 'Customer Data',
+  tableOptions: {
+    search: true,
+    pageSize: 10,
+    exportButton: true,
+    exportAllData: true,
+  },
+}

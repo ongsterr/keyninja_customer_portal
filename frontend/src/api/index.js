@@ -59,8 +59,8 @@ const requests = {
 const limit = (count, p) => `limit=${count}&offset=${p ? p : 0}`
 
 const Customers = {
-  getAll: page => requests.get(`/customers?${limit(10, page)}`),
-  create: customer => requests.post('/customers', { customer }),
+  getAll: page => requests.get(`/customers?${limit(100, page)}`),
+  create: customers => requests.post('/customers', { customers }),
   update: (customer, customerId) =>
     requests.put(`/customers/${customerId}`, { customer }),
   delete: customerId => requests.delete(`/customers/${customerId}`),

@@ -6,7 +6,7 @@ import MessageBox from './components/Snackbar'
 
 import api from '../api'
 import { StringHelper } from '../utils'
-import { tableColumns } from '../config'
+import { tableDetails } from '../config'
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -38,7 +38,7 @@ const CustomerTable = () => {
       })
 
       const tableContent = {
-        columns: tableColumns,
+        columns: tableDetails.tableColumns,
         data,
       }
 
@@ -61,7 +61,7 @@ const CustomerTable = () => {
     })
 
     return {
-      columns: tableColumns,
+      columns: tableDetails.tableColumns,
       data,
     }
   }
@@ -82,11 +82,14 @@ const CustomerTable = () => {
   }
 
   const addData = async ({ firstName, lastName, email }) => {
-    const newCustomer = {
-      firstName,
-      lastName,
-      email,
-    }
+    const newCustomer = [
+      {
+        firstName,
+        lastName,
+        email,
+      },
+    ]
+
     const res = await api.Customers.create(newCustomer)
 
     checkValidationError(res)
@@ -124,7 +127,7 @@ const CustomerTable = () => {
         messageType={'error'}
       />
       <MaterialTable
-        title="Customer Data"
+        title={tableDetails.tableTitle}
         columns={state.columns}
         data={state.data}
         editable={{
@@ -132,10 +135,7 @@ const CustomerTable = () => {
           onRowUpdate: (newData, oldData) => updateData(newData, oldData),
           onRowDelete: oldData => deleteData(oldData),
         }}
-        options={{
-          search: true,
-          pageSize: 10,
-        }}
+        options={tableDetails.tableOptions}
       />
     </div>
   )
