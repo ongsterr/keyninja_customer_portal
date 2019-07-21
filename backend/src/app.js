@@ -78,8 +78,8 @@ const server = app.listen(process.env.PORT || 3001, () => {
 })
 
 // Gracefully shutting down
-process.on('SIGTERM', shutDown)
-process.on('SIGINT', shutDown)
+process.on('SIGTERM', shutdown)
+process.on('SIGINT', shutdown)
 
 let connections = []
 
