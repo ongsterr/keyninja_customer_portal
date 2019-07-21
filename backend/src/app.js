@@ -38,7 +38,7 @@ if (isProduction) {
     .then(() => console.log('Mongodb connection established :)'))
     .catch(err => console.error(`Mongodb failure: ${err.message}`))
   mongoose.set('useCreateIndex', true)
-  mongoose.set('debug', true)
+  mongoose.set('debug', false)
 }
 
 // Catch 404 and forward to error handler
@@ -76,3 +76,37 @@ app.use((err, req, res, next) => {
 const server = app.listen(process.env.PORT || 3001, () => {
   console.log('Listening on port ' + server.address().port)
 })
+
+// Gracefully shutting down
+process.on('SIGTERM', shutDown)
+process.on('SIGINT', shutDown)
+
+let connections = []
+
+server.on('connection', connection => {
+  connections.push(connection)
+  connection.on(
+    'close',
+    () => (connections = connections.filter(curr => curr !== connection))
+  )
+})
+
+function shutdown() {
+  console.log('Received kill signal, shutting down gracefully')
+  server.close(() => {
+    console.log('Closed out remaining connections')
+    process.exit(0)
+  })
+
+  setTimeout(() => {
+    console.error(
+      'Could not close connections in time, forcefully shutting down'
+    )
+    process.exit(1)
+  }, 10000)
+
+  connections.forEach(curr => curr.end())
+  setTimeout(() => connections.forEach(curr => curr.destroy()), 5000)
+}
+
+module.exports = { server, shutdown }
