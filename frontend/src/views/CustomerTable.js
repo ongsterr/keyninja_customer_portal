@@ -34,7 +34,11 @@ const CustomerTable = () => {
 
   // Stage management
   const [state, setState] = React.useState([])
-  const [error, setError] = React.useState({ open: false, msg: '' })
+  const [info, setInfo] = React.useState({
+    open: false,
+    msgType: 'error',
+    msg: '',
+  })
 
   // Before component mount
   useEffect(() => {
@@ -87,7 +91,11 @@ const CustomerTable = () => {
         Object.keys(csvData[0]).join('') !== uploadConfig.columns.join('')
 
       if (csvFileColumnCheck) {
-        setError({ open: true, msg: 'Error: data format is not correct.' })
+        setInfo({
+          open: true,
+          msgType: 'error',
+          msg: 'Error: data format is not correct.',
+        })
         return
       }
 
@@ -98,12 +106,17 @@ const CustomerTable = () => {
         .then(async () => {
           const tableContent = await getCustomerData()
           setState(tableContent)
+          setInfo({
+            open: true,
+            msgType: 'success',
+            msg: 'Customer data successfully uploaded',
+          })
         })
         .catch(err => console.log(err))
     }
 
     const errorCallback = (error, file) => {
-      setError({ open: true, msg: error })
+      setInfo({ open: true, msgType: 'error', msg: error })
     }
 
     await uploadFile(event.target.files[0], completeCallback, errorCallback)
@@ -111,18 +124,18 @@ const CustomerTable = () => {
 
   const checkValidationError = res => {
     if (res.errors && res.errors.error === 'ValidationError') {
-      setError({ open: true, msg: res.errors.message })
+      setInfo({ open: true, msgType: 'error', msg: res.errors.message })
     } else if (res.errors && res.errors.error === 'MongoError') {
-      setError({ open: true, msg: res.errors.message })
+      setInfo({ open: true, msgType: 'error', msg: res.errors.message })
     }
   }
 
-  const handleCloseError = (event, reason) => {
+  const handleCloseInfoBox = (event, reason) => {
     if (reason === 'clickaway') {
       return
     }
 
-    setError({ open: false, msg: '' })
+    setInfo({ ...info, open: false })
   }
 
   const addData = async ({ firstName, lastName, email }) => {
@@ -139,6 +152,11 @@ const CustomerTable = () => {
     checkValidationError(res)
     const tableContent = await getCustomerData()
     setState(tableContent)
+    setInfo({
+      open: true,
+      msgType: 'success',
+      msg: 'Customer data successfully added',
+    })
   }
 
   const updateData = async ({ _id, firstName, lastName, email }, oldData) => {
@@ -152,6 +170,11 @@ const CustomerTable = () => {
     checkValidationError(res)
     const tableContent = await getCustomerData()
     setState(tableContent)
+    setInfo({
+      open: true,
+      msgType: 'success',
+      msg: 'Customer data successfully updated',
+    })
   }
 
   const deleteData = async oldData => {
@@ -165,10 +188,10 @@ const CustomerTable = () => {
   return (
     <div className={classes.root}>
       <MessageBox
-        message={error.msg}
-        handleClose={(event, reason) => handleCloseError(event, reason)}
-        open={error.open}
-        messageType={'error'}
+        message={info.msg}
+        handleClose={(event, reason) => handleCloseInfoBox(event, reason)}
+        open={info.open}
+        messageType={info.msgType}
       />
       <MaterialTable
         title={tableDetails.tableTitle}
