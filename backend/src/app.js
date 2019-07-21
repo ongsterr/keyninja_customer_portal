@@ -38,7 +38,7 @@ if (isProduction) {
     .then(() => console.log('Mongodb connection established :)'))
     .catch(err => console.error(`Mongodb failure: ${err.message}`))
   mongoose.set('useCreateIndex', true)
-  mongoose.set('debug', false)
+  mongoose.set('debug', true)
 }
 
 // Catch 404 and forward to error handler

@@ -20,8 +20,10 @@ router.get('/', (req, res, next) => {
   return Customer.find()
     .limit(Number(limit))
     .skip(Number(offset))
+    .sort('-created_at')
     .exec()
     .then(results => {
+      console.log(results[0])
       return res.json({
         customers: results,
       })

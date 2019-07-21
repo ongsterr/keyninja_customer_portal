@@ -33,6 +33,7 @@ const CustomerTable = () => {
   const classes = useStyles()
 
   // Stage management
+  const [loading, setLoading] = React.useState(true)
   const [state, setState] = React.useState([])
   const [info, setInfo] = React.useState({
     open: false,
@@ -43,6 +44,7 @@ const CustomerTable = () => {
   // Before component mount
   useEffect(() => {
     const getCustomerData = async () => {
+      setLoading(true)
       const res = await api.Customers.getAll()
       const data = res.customers.map(customer => {
         const capitalizedFirstName = StringHelper.capitalize(customer.firstName)
@@ -60,6 +62,7 @@ const CustomerTable = () => {
       }
 
       setState(tableContent)
+      setLoading(false)
     }
 
     getCustomerData()
@@ -104,8 +107,10 @@ const CustomerTable = () => {
           checkValidationError(res)
         })
         .then(async () => {
+          setLoading(true)
           const tableContent = await getCustomerData()
           setState(tableContent)
+          setLoading(false)
           setInfo({
             open: true,
             msgType: 'success',
@@ -202,6 +207,7 @@ const CustomerTable = () => {
           onRowUpdate: (newData, oldData) => updateData(newData, oldData),
           onRowDelete: oldData => deleteData(oldData),
         }}
+        isLoading={loading}
         options={tableDetails.tableOptions}
         components={{
           Toolbar: props => (
