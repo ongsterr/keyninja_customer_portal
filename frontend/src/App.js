@@ -1,8 +1,7 @@
 import React from 'react'
 import { makeStyles } from '@material-ui/core/styles'
-import CssBaseline from '@material-ui/core/CssBaseline'
 
-import Customer from './views/Customer'
+import CustomerTable from './views/CustomerTable'
 import Header from './views/components/Header'
 import Footer from './views/components/Footer'
 
@@ -21,9 +20,8 @@ const App = () => {
 
   return (
     <div className={classes.root}>
-      <CssBaseline />
       <Header title={portalDetails.title} logo={portalDetails.logoLink} />
-      <Customer />
+      <CustomerTable />
       <Footer footerText={portalDetails.footerText} />
     </div>
   )
